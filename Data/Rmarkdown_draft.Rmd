@@ -1,14 +1,7 @@
 ---
 title: "Gender Equality Trends"
-knit: (function(input_file, encoding) {
-  out_dir <- 'docs';
-  rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Dominic Teo"
-output:
-  html_document: default
-  pdf_document: default
+output: github_document   
 ---
 
 ```{r setup, include=FALSE}
@@ -54,15 +47,15 @@ detach(senior_manage)
 
 attach(senior_manage_top)
 bar = ggplot(senior_manage_top, aes(x= reorder(Countries, Female_Share_Middle_Senior_Management), y=Female_Share_Middle_Senior_Management, fill = Continent)) + geom_bar(stat = "identity") + coord_flip()
-bar = bar + scale_fill_manual("Continents", values = c("Africa" = "#a6cee3", "Asia" = "#1f78b4", "Europe" = "#b2df8a", "N.America" = "#33a02c", "Oceania" = "#fb9a99"))
+bar = bar + scale_fill_manual("Continents", values = c("Africa" = "#2699D0", "Asia" = "#4CA145", "Europe" = "#F69D30", "N.America" = "#E31480", "Oceania" = "#C42231"))
 bar = bar + geom_hline(aes(yintercept=30.4), linetype = "dashed")
-bar = bar + labs(title = "Countries with the highest and lowest proportion \nof female middle and senior managers", subtitle = "Proportion calculated by dividing female managers by total working females, Data from 2011 - 2017", caption = "International Labour Organisation (ILO)")
+bar = bar + labs(title = "Countries with the highest and lowest proportion \nof female middle and senior managers", subtitle = "North American and African countries perform well while Asian and E.European countries perform poorly", caption = "International Labour Organisation (ILO)")
 bar = bar + labs(y="Proportion of Female Middle & Senior Management (%)")
 bar = bar + labs(x = NULL)
 bar = bar + geom_text(x =1, y =33, label = "Average among 92 countries", size =3)
 bar = bar + theme(plot.title = element_text(size = 15, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.89, 0.26), panel.background = element_blank())
 detach(senior_manage_top)
-bar + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
+bar + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6)) + scale_y_continuous(expand = c(0, 0))
 
 ```
 
@@ -82,7 +75,11 @@ con_senior_bar = con_senior_bar + labs(title = "Average of female middle and sen
 con_senior_bar = con_senior_bar + labs(x = NULL)
 con_senior_bar = con_senior_bar + geom_text(x =1, y =33, label = "Average among 92 countries", size =3)
 con_senior_bar = con_senior_bar+ theme(plot.title = element_text(size = 15.5, face = 'bold'))  + theme(plot.caption = element_text(size = 8)) + theme(plot.subtitle = element_text(size = 8))
-con_senior_bar
+con_senior_bar + theme(plot.background = element_blank(),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         panel.background = element_rect(fill = "white") ) +
+  scale_y_continuous(expand = c(0, 0))
 detach(continent_senior)
 ```
 
@@ -103,7 +100,7 @@ fem_owner_top= fem_owner[c(96:108, 1:12),]
 detach(fem_owner)
 attach(fem_owner_top)
 bar1 = ggplot(fem_owner_top, aes(x= reorder(Countries, Firms_Female_Ownership), y=Firms_Female_Ownership, fill = Continent)) + geom_bar(stat = "identity") + coord_flip()
-bar1 = bar1 + scale_fill_manual("Continent", values = c("Africa" = "#a6cee3", "Asia" = "#1f78b4", "Europe" = "#b2df8a", "S.America" = "#e31a1c"))
+bar1 = bar1 + scale_fill_manual("Continent", values = c("Africa" = "#2699D0", "Asia" = "#4CA145", "Europe" = "#F69D30", "S.America" = "#424242"))
 bar1 = bar1 + geom_hline(aes(yintercept=33.7), linetype = "dashed")
 bar1 = bar1 + labs(title = "Countries with the highest and lowest share of firms \nwhich counts a female as one of its principal owners",   subtitle = "The top countries (South American) are very different from the previoous metric which leaned towards North American \ncountries.There also appear to be more African countries as bottom performers rather than European ones." )
 bar1 = bar1 + labs(y="Firms with Female Ownership (%)")
@@ -111,7 +108,8 @@ bar1 = bar1 + labs(x = NULL, caption = "Source: World Bank and Enterprise Survey
 bar1 = bar1 + theme(plot.title = element_text(size = 14.8, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.90, 0.22),panel.background = element_blank())
 bar1 = bar1 + geom_text(x =1, y =35, label = "Average among 108 countries", size =3)
 detach(fem_owner_top)
-bar1 + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
+bar1 = bar1 + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
+bar1 + scale_y_continuous(expand = c(0, 0))
 ```
 
 
@@ -127,7 +125,12 @@ own_average = own_average + scale_fill_manual(values = c('#595959', 'red'))
 own_average = own_average + geom_hline(aes(yintercept=33.7), linetype = "dashed")
 own_average = own_average + labs(title = "Continental average of firms with female ownership", subtitle = "Biggest change from previous metric is the outperformance of South America and the poor performance of Africa. While Africa \nwas third in terms of female middle/senior managers, they are decidedly last in this metric.", caption = "Source: World Bank and Enterprise Surveys", x = NULL)
 own_average = own_average + theme(plot.title = element_text(size = 15.5, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.88, 0.20))
-own_average + theme(legend.position = "none") + geom_text(x =1, y =40, label = "Average among 108 countries", size =3) + theme(plot.subtitle = element_text(size = 8))
+own_average + theme(legend.position = "none") + geom_text(x =1, y =40, label = "Average among 108 countries", size =3) + theme(plot.subtitle = element_text(size = 8)) + 
+  theme(plot.background = element_blank(),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         panel.background = element_rect(fill = "white") ) +
+  scale_y_continuous(expand = c(0, 0))
 detach(continent_own)
 ```
 
@@ -143,7 +146,7 @@ fem_par = na.omit(fem_par)
 fem_par_top = fem_par[c(181:193, 1:12),]
 
 bar2 = ggplot(fem_par_top, aes(x= reorder(Countries, Female_Share_Parliaments), y=Female_Share_Parliaments, fill = Continent)) + geom_bar(stat = "identity") + coord_flip()
-bar2 = bar2 + scale_fill_manual("Continents", values = c("Africa" = "#a6cee3", "Asia" = "#1f78b4", "Europe" = "#b2df8a", "N.America" = "#33a02c", "Oceania" = "#fb9a99", "S.America" = "#e31a1c"))
+bar2 = bar2 + scale_fill_manual("Continents", values = c("Africa" = "#2699D0", "Asia" = "#4CA145", "Europe" = "#F69D30", "N.America" = "#E31480", "Oceania" = "#C42231", "S.America" = "#424242"))
 bar2 = bar2 + geom_hline(aes(yintercept=21.8), linetype = "dashed")
 bar2 = bar2 + labs(title = "Countries with the highest and lowest female share \nof national parliament seats", subtitle = "Top and bottom countries appear to be more spread out by region and the variance from the mean appears to be greater \nthan the previous two metrics. There are also 4 countries that don't have any female representation in their parliaments" , caption = "Source: Inter-Parliamentary Union (2018)")
 bar2 = bar2 + labs(y="Female Share of National Parliament Seats (%)")
@@ -151,13 +154,18 @@ bar2 = bar2 + labs(x = NULL)
 bar2 = bar2 + theme(plot.title = element_text(size = 15.2, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.91, 0.26))
 bar2 = bar2 + geom_text(x =1, y =28, label = "Average among 193 countries", size =3)
 
-bar2 + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
+bar2 + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6)) + theme(plot.background = element_blank(),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         panel.background = element_rect(fill = "white") ) +
+  scale_y_continuous(expand = c(0, 0))
 
 ```
 
 ```{r parliament continent, echo=FALSE}
 continent_par = aggregate(fem_par[, 3], list(fem_par$Continent), mean)
 colnames(continent_par) = c("Continent", "Female Share of National Parliament Seats (%)")
+continent_par$`Female Share of National Parliament Seats (%)` = as.integer(continent_par$`Female Share of National Parliament Seats (%)`)
 attach(continent_par)
 continent_par$highlight_flag = ifelse(`Female Share of National Parliament Seats (%)` < 21.8, T, F)
 par_average = ggplot(continent_par, aes(x = reorder(Continent, `Female Share of National Parliament Seats (%)`), y= `Female Share of National Parliament Seats (%)`)) + geom_bar(aes(fill =highlight_flag), stat = "identity") + coord_flip()
@@ -165,7 +173,13 @@ par_average = par_average + scale_fill_manual(values = c('#595959', 'red'))
 par_average = par_average + geom_hline(aes(yintercept=21.8), linetype = "dashed")
 par_average = par_average+ labs(title = "Continental average of firms with female share of national \nparliamentary seats", caption = "Source: World Bank and Enterprise Surveys", x = NULL, subtitle ="South America again maintains its top position while Oceania is at the bottom. Europe also does better in this metric \nas compared to the previous two")
 par_average = par_average + theme(plot.title = element_text(size = 15, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.88, 0.20))
-par_average + geom_text(x =1, y =22, label = "Average among 193 countries", size =3) + theme(legend.position = "none")
+par_average = par_average + geom_text(x =1, y =22, label = "Average among 193 countries", size =3) + theme(legend.position = "none")
+par_average = par_average + theme(plot.background = element_blank(),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         panel.background = element_rect(fill = "white") )
+
+par_average + scale_y_continuous(expand = c(0, 0))
 detach(continent_par)
 ```
 
@@ -211,7 +225,7 @@ I think that the incredibly low R Squared score is actually quite suprising henc
 
 ```{r r/s between senior/middle management, echo=FALSE}
 scatter = ggplot(common_senior_parliament, aes(x=Female_Share_Middle_Senior_Management, y = Female_Share_Parliaments, colour = Continent)) + geom_point()
-scatter = scatter + scale_color_manual("Continent", values = c("palevioletred3", "lightsalmon3", "thistle3","lightgoldenrod3", "darkseagreen3", "royalblue3"))  
+scatter = scatter + scale_color_manual("Continent", values = c("Africa" = "#2699D0", "Asia" = "#4CA145", "Europe" = "#F69D30", "N.America" = "#E31480", "Oceania" = "#C42231", "S.America" = "#424242"))  
 scatter = scatter + geom_smooth(method = "lm", se=FALSE)
 scatter = scatter + theme(plot.title = element_text(size = 14.8, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.07, 0.76)) + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
 scatter = scatter + labs(title = "Understanding the relationship between female share of \nparliaments and senior management positions by continent", subtitle = "Lack of correlation is not consistent across Continents. There is a positive correlation for Oceania and North America \nbut a neagtive correlation for Asia and South America", caption = "Source: Inter-Parliamentary Union & Internaitonal Labour Organisation")
@@ -238,7 +252,7 @@ scat_owner_par
 
 ```{r r/s between firm ownership & parliament by continent, echo=FALSE}
 scatter1 = ggplot(common_owner_parliament, aes(x=Firms_Female_Ownership, y = Female_Share_Parliaments, colour = Continent)) + geom_point()
-scatter1 = scatter1 + scale_color_manual("Continent", values = c("palevioletred3", "lightsalmon3", "thistle3","lightgoldenrod3", "darkseagreen3", "royalblue3"))  
+scatter1 = scatter1 + scale_color_manual("Continent", values = c("Africa" = "#2699D0", "Asia" = "#4CA145", "Europe" = "#F69D30", "N.America" = "#E31480", "Oceania" = "#C42231", "S.America" = "#424242"))  
 scatter1 = scatter1 + geom_smooth(method = "lm", se=FALSE)
 scatter1 = scatter1 + theme(plot.title = element_text(size = 14.8, face = 'bold')) + theme(plot.subtitle = element_text(size = 8)) + theme(plot.caption = element_text(size = 8)) + theme(legend.position = c(0.07, 0.76)) + theme(legend.text = element_text(size = 5), legend.title = element_text(size = 6))
 scatter1 = scatter1 + labs(title = "Understanding the relationship between female share of \nparliaments and firm ownership by continent", subtitle = "Clear that there is a more positive correlation between these two metrics across the different Continnents ", caption = "Source: Inter-Parliamentary Union, World Bank & Enterprise Surveys")
